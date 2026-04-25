@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주식투자자용 재무제표 | 하루 만에 끝내기</title>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-primary: #2563eb;
+            --accent-glow: #3b82f6;
+            --accent-secondary: #059669;
+            --card-border: rgba(15, 23, 42, 0.08);
+            --gradient-text: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-nav {
+            padding: 10px 24px;
+            background: rgba(37, 99, 235, 0.05);
+            color: var(--accent-primary);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 100px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-nav:hover {
+            background: rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 180px 5% 120px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 80vw;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.05) 40%, rgba(248, 250, 252, 0) 70%);
+            z-index: -1;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(15, 23, 42, 0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .badge span {
+            color: var(--accent-primary);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.3;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            animation: fadeInUp 1s ease 0.2s backwards;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 1s ease 0.6s backwards;
+            text-decoration: none;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Hooking Section */
+        .section {
+            padding: 100px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(15, 23, 42, 0.02);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-text);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(37, 99, 235, 0.08);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 24px;
+            border: 1px solid rgba(37, 99, 235, 0.15);
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Structure Section */
+        .structure-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .part-box {
+            display: flex;
+            background: var(--bg-surface);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 6px rgba(15, 23, 42, 0.02);
+        }
+
+        .part-box:hover {
+            border-color: rgba(124, 58, 237, 0.3);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+        }
+
+        .part-label {
+            background: rgba(37, 99, 235, 0.02);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid var(--card-border);
+            min-width: 250px;
+        }
+
+        .part-label span {
+            font-size: 1rem;
+            color: var(--accent-primary);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .part-label h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .part-content {
+            padding: 40px;
+            flex-grow: 1;
+        }
+
+        .feature-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 30px;
+            color: var(--text-secondary);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--accent-secondary);
+            font-weight: 800;
+        }
+
+        .feature-list li strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Bottom CTA */
+        .bottom-cta {
+            padding: 100px 5%;
+            text-align: center;
+            background: linear-gradient(to bottom, transparent, rgba(37, 99, 235, 0.03));
+            border-top: 1px solid var(--card-border);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .part-box {
+                flex-direction: column;
+            }
+
+            .part-label {
+                border-right: none;
+                border-bottom: 1px solid var(--card-border);
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">FinInsight</div>
+        <button class="btn-nav" onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})">영상
+            보러가기</button>
+    </nav>
+
+    <header class="hero">
+        <div class="badge">🔥 <span>하루 만에</span> 주식투자 완벽 마스터</div>
+        <h1>회계학자가 될 필요 없습니다.<br><span>돈 버는 '알짜 기업'</span> 찾는 법</h1>
+        <p>계좌 개설부터 심화 재무제표 분석까지. 동네 치킨집 사장님의 시선에서 시작해 테슬라, 쿠팡을 분석하는 글로벌 투자자의 시선으로 만들어 드립니다.</p>
+        <a href="#curriculum" class="cta-btn">커리큘럼 확인하기 ↓</a>
+    </header>
+
+    <section class="section">
+        <div class="section-header">
+            <h2>왜 이 시리즈를 봐야 할까요?</h2>
+            <p>막연한 두려움을 없애고, 철저하게 주식 투자자에게 필요한 지식만 담았습니다.</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-icon">🛡️</div>
+                <h3>심리적 장벽 제거</h3>
+                <p>계좌 개설부터 수수료의 비밀, 리딩방 사기 예방까지. 초보자의 눈높이에서 막연한 두려움을 확실하게 해소해 드립니다.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🍗</div>
+                <h3>직관적인 비유법</h3>
+                <p>의결권은 '미국령 투표권', 매출과 이익은 '동네 치킨집'에 빗대어 설명해 진입 장벽을 완전히 허물었습니다.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">💎</div>
+                <h3>유료급 정보의 무료화</h3>
+                <p>수십만 원짜리 정규 강의에서나 볼 수 있는 '매물대 돌파 전략'과 '미래 PER 계산법' 등을 아낌없이 공개합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="curriculum">
+        <div class="section-header">
+            <h2>완벽한 4단계 빌드업 커리큘럼</h2>
+            <p>생존을 위한 마인드셋부터 차트와 재무제표 실전 분석까지 완벽하게 이어집니다.</p>
+        </div>
+
+        <div class="structure-container">
+            <!-- Part 1 (Video 1) -->
+            <div class="part-box">
+                <div class="part-label">
+                    <span>Course 1</span>
+                    <h3>주식투자 마인드셋</h3>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);">주식투자 하루 만에 끝내기 1탄</p>
+                </div>
+                <div class="part-content">
+                    <ul class="feature-list">
+                        <li>
+                            <strong>생존 투자 전략</strong>
+                            26년간 7번의 하락장을 겪으며 터득한 '살아남는 투자'의 본질
+                        </li>
+                        <li>
+                            <strong>복리의 마법</strong>
+                            인플레이션을 넘어서는 자산 증식과 '72의 법칙' 활용법
+                        </li>
+                        <li>
+                            <strong>리스크 관리와 타이밍</strong>
+                            무조건적 장기투자의 위험성과 '쌀 때 사는 것'의 중요성
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Part 2 (Video 2) -->
+            <div class="part-box">
+                <div class="part-label">
+                    <span>Course 2</span>
+                    <h3>기초 용어 총정리</h3>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);">주식투자 하루 만에 끝내기 2탄</p>
+                </div>
+                <div class="part-content">
+                    <ul class="feature-list">
+                        <li>
+                            <strong>실전 매매 기초</strong>
+                            증권사 선택, 시장가/지정가 활용법, 사기 예방을 위한 시간외 단일가 팁
+                        </li>
+                        <li>
+                            <strong>주식의 종류와 권리</strong>
+                            보통주, 우선주, 상환우선주의 차이점 (괌/사이판 투표권 비유)
+                        </li>
+                        <li>
+                            <strong>3대 가치 지표 풀이</strong>
+                            치킨집 인수로 알아보는 PER, PBR, ROE 실전 계산법
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Part 3 (Video 3) -->
+            <div class="part-box">
+                <div class="part-label">
+                    <span>Course 3</span>
+                    <h3>실전 차트 분석</h3>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);">주식투자 하루 만에 끝내기 3탄</p>
+                </div>
+                <div class="part-content">
+                    <ul class="feature-list">
+                        <li>
+                            <strong>캔들(봉차트) 해석법</strong>
+                            꼬리 길이에 따른 세력의 힘 파악 및 내일의 주가 예측
+                        </li>
+                        <li>
+                            <strong>이평선과 골든크로스</strong>
+                            정배열/역배열을 활용한 추세 파악 및 강력한 상승 신호 포착
+                        </li>
+                        <li>
+                            <strong>거래량과 매물대 전략</strong>
+                            매물대 돌파를 통한 저항선 확인 및 수익 극대화 타이밍 잡기
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Part 4 (Video 4) -->
+            <div class="part-box">
+                <div class="part-label">
+                    <span>Course 4</span>
+                    <h3>실전 재무제표</h3>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-secondary);">주식투자 하루 만에 끝내기 4탄</p>
+                </div>
+                <div class="part-content">
+                    <ul class="feature-list">
+                        <li>
+                            <strong>재무제표 3대 요소</strong>
+                            손익계산서, 재무상태표, 현금흐름표의 기초와 분석법
+                        </li>
+                        <li>
+                            <strong>고정비와 브랜드 파워</strong>
+                            테슬라의 이익 폭발 구조 및 나이키/스타벅스 비용 절감 분석
+                        </li>
+                        <li>
+                            <strong>턴어라운드 타이밍</strong>
+                            쿠팡 사례를 통해 적자 기업의 흑자 전환 징후를 먼저 읽는 법
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bottom-cta">
+        <h2>계좌 개설부터 테슬라 투자까지,<br>단 하루 만에 끝내는 확실한 투자 인사이트</h2>
+        <p style="color: var(--text-secondary); margin: 20px 0 40px; font-size: 1.1rem;">지금 바로 시작해서 당신의 주식 투자 시야를 넓혀보세요.
+        </p>
+        <a href="https://youtu.be/kq25BkgwD6g?si=H3RrH4kDY3YxIbXA" target="_blank" class="cta-btn"
+            style="transform: scale(1.1);">클래스 시작하기 🚀</a>
+    </section>
+
+    <script>
+        // Simple intersection observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.card, .part-box').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(30px)";
+            el.style.transition = "all 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
